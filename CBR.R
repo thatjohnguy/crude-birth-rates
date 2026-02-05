@@ -70,7 +70,7 @@ women_popstate <- PRdata %>%
 women_popstate <- as.data.frame(women_popstate)
 women_popstate <- merge(women_popstate, hh_popstate, by = "shstate1")
 
-women_popstate$CBR_popstate <- (women_popstate$total.x/women_popstate$total.y) * ASFRstate$ASFR[2:15]
+women_popstate$CBR_popstate <- (women_popstate$total.x/women_popstate$total.y) * ASFRstate$ASFR
 
 CBR_kogi = sum(women_popstate$CBR_popstate[women_popstate$shstate1==3])
 CBR_kaduna = sum(women_popstate$CBR_popstate[women_popstate$shstate1==15])
@@ -80,6 +80,6 @@ CBR_lagos = sum(women_popstate$CBR_popstate[women_popstate$shstate1==33])
 CBR_national = sum(women_popstate$CBR_popstate)
 CBR  = sum(CBR_pop)
 
-CBRres <- as.data.frame(cbind(CBR,CBR_kogi,CBR_kaduna,CBR_bayelsa,CBR_lagos))
+CBRres <- as.data.frame(cbind(CBR,CBR_bayelsa,CBR_kaduna,CBR_kogi,CBR_lagos))
 
-write.xlsx(CBRres, "DHS_CBR_state_national.xlsx", sheetName = "CBR")
+write.xlsx(CBRres, "DHS_CBR_state_national_2024.xlsx", sheetName = "CBR")
