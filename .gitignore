@@ -1,0 +1,4 @@
+.Rproj.user/
+*.xlsx
+renv/library/
+*.json
