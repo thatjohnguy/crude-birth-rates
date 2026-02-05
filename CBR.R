@@ -82,4 +82,4 @@ CBR  = sum(CBR_pop)
 
 CBRres <- as.data.frame(cbind(CBR,CBR_bayelsa,CBR_kaduna,CBR_kogi,CBR_lagos))
 
-write.xlsx(CBRres,"DHS_CBR_state_national_2018.xlsx", sheetName = "CBR")
+write.xlsx(CBRres,"DHS_CBR_state_national_2013.xlsx", sheetName = "CBR")
