@@ -80,6 +80,6 @@ CBR_lagos = sum(women_popstate$CBR_popstate[women_popstate$shstate==360])
 CBR_national = sum(women_popstate$CBR_popstate)
 CBR  = sum(CBR_pop)
 
-CBRres <- as.data.frame(cbind(CBR,CBR_kogi,CBR_kaduna,CBR_bayelsa,CBR_lagos))
+CBRres <- as.data.frame(cbind(CBR,CBR_bayelsa,CBR_kaduna,CBR_kogi,CBR_lagos))
 
 write.xlsx(CBRres,"DHS_CBR_state_national_2018.xlsx", sheetName = "CBR")
