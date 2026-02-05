@@ -20,19 +20,19 @@ library(dplyr)
 library(DHS.rates)
 library(openxlsx)
 
-IRdata<-read_dta("../Resources/NGIR8BDT2024/NGIR8BFL.dta")
-PRdata<-read_dta("../Resources/NGPR8ADT2024/NGPR8AFL.dta")
+IRdata<-read_dta("../Resources/NGIR6ADT2013/NGIR6AFL.DTA")
+PRdata<-read_dta("../Resources/NGPR6ADT2013/NGPR6AFL.DTA")
 
 
 IRdata_FERT <- (IRdata[, c("v021", "v022","v024", "v025", "v005", "v008","v011", "awfactt", "awfactu", "awfactr", "awfacte", "awfactw",
-                           paste("b3_0", 1:9, sep=""), paste("b3_", 10:20, sep=""), "v106", "v190","sstate1")])
+                           paste("b3_0", 1:9, sep=""), paste("b3_", 10:20, sep=""), "v106", "v190","sstate")])
 # # National and urban/rural ASFR from IR data
 # ASFR <- as.data.frame(fert(IRdata_FERT,Indicator="asfr",EverMW = "Yes", AWFact = "awfactt"))
 # ASFRur <- as.data.frame(fert(IRdata_FERT,Indicator="asfr", Class = "v025",EverMW = "Yes", AWFact = "awfactu"))
 
 # National and state ASFR from IR data
 ASFR <- as.data.frame(fert(IRdata_FERT,Indicator="asfr",EverMW = "Yes", AWFact = "awfactt"))
-ASFRstate <- as.data.frame(fert(IRdata_FERT,Indicator="asfr", Class = "sstate1",EverMW = "Yes", AWFact = "awfactu"))
+ASFRstate <- as.data.frame(fert(IRdata_FERT,Indicator="asfr", Class = "sstate",EverMW = "Yes", AWFact = "awfactu"))
 
 
 
@@ -48,7 +48,7 @@ hh_pop <- PRdata %>%
   summarise(total = sum(wt, na.rm = TRUE))
 
 hh_popstate <- PRdata %>% 
-  group_by(shstate1) %>%
+  group_by(shstate) %>%
   summarise(total = sum(wt, na.rm = TRUE))
 hh_popstate <- as.data.frame(hh_popstate)
 
@@ -64,22 +64,22 @@ CBR_pop = (women_pop$total/hh_pop$total)*ASFR$ASFR
 # state counts by age groups
 women_popstate <- PRdata %>% 
   filter(hv105 >= 15 & hv105 <= 49 & hv104 == 2) %>%  # select de facto women 15-49
-  group_by(agegroup, shstate1) %>%
+  group_by(agegroup, shstate) %>%
   summarise(total = sum(wt, na.rm = TRUE))
 
 women_popstate <- as.data.frame(women_popstate)
-women_popstate <- merge(women_popstate, hh_popstate, by = "shstate1")
+women_popstate <- merge(women_popstate, hh_popstate, by = "shstate")
 
 women_popstate$CBR_popstate <- (women_popstate$total.x/women_popstate$total.y) * ASFRstate$ASFR[2:15]
 
-CBR_kogi = sum(women_popstate$CBR_popstate[women_popstate$shstate1==3])
-CBR_kaduna = sum(women_popstate$CBR_popstate[women_popstate$shstate1==15])
-CBR_bayelsa = sum(women_popstate$CBR_popstate[women_popstate$shstate1==16])
-CBR_lagos = sum(women_popstate$CBR_popstate[women_popstate$shstate1==33])
+CBR_kogi = sum(women_popstate$CBR_popstate[women_popstate$shstate==190])
+CBR_kaduna = sum(women_popstate$CBR_popstate[women_popstate$shstate==110])
+CBR_bayelsa = sum(women_popstate$CBR_popstate[women_popstate$shstate==340])
+CBR_lagos = sum(women_popstate$CBR_popstate[women_popstate$shstate==360])
 
-CBR_national = sum(women_popstate$CBR_popstate)
+
 CBR  = sum(CBR_pop)
 
 CBRres <- as.data.frame(cbind(CBR,CBR_kogi,CBR_kaduna,CBR_bayelsa,CBR_lagos))
 
-write.xlsx(CBRres, "DHS_CBR_state_national.xlsx", sheetName = "CBR")
+write.xlsx(CBRres,"DHS_CBR_state_national_2018.xlsx", sheetName = "CBR")
